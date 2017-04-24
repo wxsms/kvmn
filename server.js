@@ -7,15 +7,13 @@ const fs = require('fs')
 const path = require('path')
 const resolve = file => path.resolve(__dirname, file)
 const serialize = require('serialize-javascript')
-
 const createBundleRenderer = require('vue-server-renderer').createBundleRenderer
 
 // const app = express()
 const Koa = require('koa')
+const staticCache = require('koa-static-cache')
 const app = new Koa()
-const serve = require('koa-static')
 const favicon = require('koa-favicon')
-const router = require('koa-router')()
 
 // parse index.html template
 const html = (() => {
@@ -34,7 +32,6 @@ if (isProd) {
   // create server renderer from real fs
   const bundlePath = resolve('./dist/server-bundle.js')
   renderer = createRenderer(fs.readFileSync(bundlePath, 'utf-8'))
-  console.log(renderer)
 } else {
   require('./build/dev-server')(app, bundle => {
     renderer = createRenderer(bundle)
@@ -51,52 +48,39 @@ function createRenderer (bundle) {
 }
 
 app.use(require('koa-bigpipe'))
+
+app.use(async (ctx, next) => {
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log(`${ctx.method} ${ctx.url} - ${ms}`)
+})
+
 app.use(favicon(path.resolve(__dirname, 'src/assets/logo.png')))
+app.use(staticCache(path.join(__dirname, 'dist'), {
+  maxAge: 365 * 24 * 60 * 60,
+  prefix: '/dist'
+}))
 
-router.get('/dist', serve(resolve('./dist')))
-
-app.use((ctx, next) => {
+app.use(async (ctx, next) => {
+  if (ctx.path.startsWith('/dist')) return
   let res = ctx.res
   let req = ctx.req
   if (!renderer) {
     return res.end('waiting for compilation... refresh in a moment.')
   }
-
-  let s = Date.now()
   const context = {url: req.url}
-  const renderStream = renderer.renderToStream(context)
-  let firstChunk = true
-
-  ctx.write(html.head)
-  console.log(html)
-  renderStream.on('data', chunk => {
-    if (firstChunk) {
-      // embed initial store state
-      if (context.initialState) {
-        ctx.write(
-          `<script>window.__INITIAL_STATE__=${
-            serialize(context.initialState, {isJSON: true})
-            }</script>`
-        )
-      }
-      firstChunk = false
-    }
-    ctx.write(chunk)
-  })
-
-  renderStream.on('end', () => {
-    ctx.end(html.tail)
-    console.log(`whole request: ${Date.now() - s}ms`)
-  })
-
-  renderStream.on('error', err => {
-    throw err
-  })
+  const stream = renderer.renderToStream(context)
+  stream.write(html.head)
+  if (context.initialState) {
+    stream.write(`<script>window.__INITIAL_STATE__ = ${serialize(context.initialState, {isJSON: true})}</script>`)
+  }
+  const passThrough = require('stream').PassThrough()
+  stream.on('end', () => {
+    passThrough.end(html.tail)
+  }).pipe(passThrough)
+  ctx.body = passThrough
 })
-
-app
-  .use(router.routes())
-  .use(router.allowedMethods())
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
