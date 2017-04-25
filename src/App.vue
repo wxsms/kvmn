@@ -24,6 +24,9 @@
 </script>
 
 <style lang="less">
+  @import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
+  @import './assets/css/core';
+
   body {
     font-family: Helvetica, sans-serif;
   }

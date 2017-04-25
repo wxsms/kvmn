@@ -1,6 +1,7 @@
 const path = require('path')
-// const projectRoot = path.resolve(__dirname, '../')
 const vueConfig = require('./vue-loader.config')
+const config = require('./config')
+const utils = require('./utils')
 
 module.exports = {
   devtool: '#source-map',
@@ -10,7 +11,7 @@ module.exports = {
   },
   resolve: {
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-    extensions: ['.js', '.vue'],
+    extensions: ['.js', '.vue', '.json'],
     alias: {
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
@@ -19,21 +20,15 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
-    publicPath: '/dist/',
+    publicPath: config.dev.assetsPublicPath,
     filename: 'client-bundle.js'
   },
   module: {
     rules: [
       {
-        enforce: 'pre',
-        test: /\.js$/,
+        test: /\.(js|vue)$/,
         loader: 'eslint-loader',
-        exclude: /node_modules/
-      },
-      {
         enforce: 'pre',
-        test: /\.vue$/,
-        loader: 'eslint-loader',
         exclude: /node_modules/
       },
       {
@@ -47,10 +42,17 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.(png|jpg|gif|svg)$/,
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]'
+          name: utils.assetsPath('img/[name].[ext]?[hash:7]')
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'file-loader',
+        options: {
+          name: utils.assetsPath('fonts/[name].[ext]?[hash:7]')
         }
       }
     ]

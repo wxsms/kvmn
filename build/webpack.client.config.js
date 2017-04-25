@@ -1,6 +1,7 @@
 const base = require('./webpack.base.config')
 const webpack = require('webpack')
 const vueConfig = require('./vue-loader.config')
+const utils = require('./utils')
 
 const config = Object.assign({}, base, {
   plugins: (base.plugins || []).concat([
@@ -33,7 +34,9 @@ if (process.env.NODE_ENV === 'production') {
   }
 
   config.plugins = config.plugins.concat([
-    new ExtractTextPlugin('styles.css'),
+    new ExtractTextPlugin({
+      filename: utils.assetsPath('css/style.css?[contenthash:7]')
+    }),
     // this is needed in webpack 2 for minifying CSS
     new webpack.LoaderOptionsPlugin({
       minimize: true
