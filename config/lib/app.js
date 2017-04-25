@@ -2,11 +2,24 @@ const config = require('../config')
 const koa = require('./koa')
 const chalk = require('chalk')
 const mongoose = require('./mongoose')
+const seed = require('./seed')
+const logger = require('./logger')
+
+const seedDB = () => {
+  if (config.seedDB && config.seedDB.seed) {
+    logger.warn('Database seeding is turned on')
+    seed.start()
+  }
+}
+
+// Initialize Models
+mongoose.loadModels(seedDB)
 
 const init = () => {
   return new Promise((resolve, reject) => {
     mongoose.connect()
       .then(() => {
+        // Initialize Koa
         let app = koa.init()
         resolve(app)
       })
@@ -29,7 +42,7 @@ const start = () => {
         console.log(chalk.green('Database:        ' + config.db.uri))
         console.log(chalk.green('App version:     ' + config.meanjs.version))
         if (config.meanjs['version']) {
-          console.log(chalk.green('kvmn version: ' + config.meanjs['version']))
+          console.log(chalk.green('kvmn version:    ' + config.meanjs['version']))
         }
         console.log('--')
       })

@@ -62,14 +62,6 @@ const validateEnvironmentVariable = () => {
   console.log(chalk.white(''))
 }
 
-/** Validate config.domain is set
- */
-const validateDomainIsSet = (config) => {
-  if (!config.domain) {
-    console.log(chalk.red('+ Important warning: config.domain is empty. It should be set to the fully qualified domain of the app.'))
-  }
-}
-
 /**
  * Validate Secure=true parameter can actually be turned on
  * because it requires certs and key files to be available
@@ -135,7 +127,6 @@ const initGlobalConfig = () => {
   config = _.merge(config, (fs.existsSync(path.join(process.cwd(), 'config/env/local-' + process.env.NODE_ENV + '.js')) && require(path.join(process.cwd(), 'config/env/local-' + process.env.NODE_ENV + '.js'))) || {})
   initGlobalConfigFiles(config, assets)
   validateSecureMode(config)
-  validateDomainIsSet(config)
   config.utils = {
     getGlobbedPaths: getGlobbedPaths
   }

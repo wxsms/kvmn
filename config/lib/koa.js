@@ -75,7 +75,7 @@ const initVueSsr = (app) => {
     // renderer not ready
     if (!renderer) {
       ctx.type = 'text'
-      ctx.body = 'waiting for compilation... refresh in a moment.'
+      ctx.body = 'Preparing client bundle, please wait...'
       return await next()
     }
     const context = {url: ctx.path}

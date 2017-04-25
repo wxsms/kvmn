@@ -3,10 +3,11 @@ const path = require('path')
 const mongoose = require('mongoose')
 
 // Load the mongoose models
-const loadModels = () => {
+const loadModels = (callback) => {
   config.files.server.models.forEach((modelPath) => {
     require(path.resolve(modelPath))
   })
+  if (callback) callback()
 }
 
 // Initialize Mongoose
