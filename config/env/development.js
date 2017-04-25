@@ -1,5 +1,5 @@
 const defaultEnvConfig = require('./default')
-
+const path = require('path')
 module.exports = {
   db: {
     uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://localhost:27017/kvmn-dev',
@@ -15,7 +15,7 @@ module.exports = {
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
     format: 'dev',
     fileLogger: {
-      directoryPath: process.cwd(),
+      directoryPath: path.join(__dirname, './../../log'),
       fileName: 'app.log',
       maxsize: 10485760,
       maxFiles: 2,

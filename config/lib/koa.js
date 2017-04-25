@@ -8,14 +8,18 @@ const createBundleRenderer = require('vue-server-renderer').createBundleRenderer
 const Koa = require('koa')
 const staticCache = require('koa-static-cache')
 const favicon = require('koa-favicon')
-
-const initRouteListener = (app) => {
-  app.use(async (ctx, next) => {
-    const start = new Date()
-    await next()
-    const ms = new Date() - start
-    console.log(`${ctx.method} ${ctx.url} - ${ms}ms ${ctx.status} ${ctx.type}`)
-  })
+const morgan = require('koa-morgan')
+const logger = require('./logger')
+const _ = require('lodash')
+const config = require('./../config')
+/**
+ * Initialize application middleware
+ */
+const initMorganHttpLogger = (app) => {
+  // Enable logger (morgan) if enabled in the configuration file
+  if (_.has(config, 'log.format')) {
+    app.use(morgan(logger.getLogFormat(), logger.getMorganOptions()))
+  }
 }
 
 const initFaviconRoute = (app) => {
@@ -91,7 +95,7 @@ const initVueSsr = (app) => {
 
 module.exports.init = () => {
   const app = new Koa()
-  initRouteListener(app)
+  initMorganHttpLogger(app)
   initFaviconRoute(app)
   initStaticRoutes(app)
   initVueSsr(app)

@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   secure: {
     // ssl: true,
@@ -37,7 +39,7 @@ module.exports = {
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
     format: process.env.LOG_FORMAT || 'combined',
     fileLogger: {
-      directoryPath: process.env.LOG_DIR_PATH || process.cwd(),
+      directoryPath: process.env.LOG_DIR_PATH || path.join(__dirname, './../../log'),
       fileName: process.env.LOG_FILE || 'app.log',
       maxsize: 10485760,
       maxFiles: 2,
