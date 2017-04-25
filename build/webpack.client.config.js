@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
 
   config.plugins = config.plugins.concat([
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/style.css?[contenthash:7]')
+      filename: utils.assetsPath('css/style.css')
     }),
     // this is needed in webpack 2 for minifying CSS
     new webpack.LoaderOptionsPlugin({

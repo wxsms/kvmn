@@ -59,11 +59,15 @@ const initVueSsr = (app) => {
   const html = (() => {
     const template = fs.readFileSync(resolve('./../../index.html'), 'utf-8')
     const i = template.indexOf('{{ APP }}')
+    let version = config.kvmn.version
+    let subfix = IS_PROD ? '' : '&dev=true'
     // styles are injected dynamically via vue-style-loader in development
-    const style = IS_PROD ? '<link rel="stylesheet" href="/dist/static/css/style.css">' : ''
+    let style = IS_PROD ? `<link rel="stylesheet" href="/dist/static/css/style.css?${version}${subfix}">` : ''
+    let script = `<script src="/dist/client-vendor-bundle.js?${version}${subfix}"></script>`
+    script += `<script src="/dist/client-bundle.js?${version}${subfix}"></script>`
     return {
       head: template.slice(0, i).replace('{{ STYLE }}', style),
-      tail: template.slice(i + '{{ APP }}'.length)
+      tail: template.replace('{{ SCRIPT }}', script).slice(i + '{{ APP }}'.length)
     }
   })()
   // init renderer base on env

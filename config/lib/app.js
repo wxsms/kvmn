@@ -40,9 +40,9 @@ const start = () => {
         console.log(chalk.green('Environment:     ' + process.env.NODE_ENV))
         console.log(chalk.green('Server:          ' + server))
         console.log(chalk.green('Database:        ' + config.db.uri))
-        console.log(chalk.green('App version:     ' + config.meanjs.version))
-        if (config.meanjs['version']) {
-          console.log(chalk.green('kvmn version:    ' + config.meanjs['version']))
+        console.log(chalk.green('App version:     ' + config.kvmn.version))
+        if (config.kvmn['kvmn-version']) {
+          console.log(chalk.green('kvmn version:    ' + config.kvmn['kvmn-version']))
         }
         console.log('--')
       })
