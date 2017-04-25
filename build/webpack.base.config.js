@@ -17,13 +17,11 @@ module.exports = {
       'components': path.resolve(__dirname, '../src/components')
     }
   },
-
   output: {
     path: path.resolve(__dirname, '../dist'),
     publicPath: '/dist/',
     filename: 'client-bundle.js'
   },
-
   module: {
     rules: [
       {

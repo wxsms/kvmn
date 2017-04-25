@@ -24,8 +24,8 @@ export default {
 }
 </script>
 
-<style>
-  body {
+<style scoped lang="less">
+  div {
     background: gray;
   }
 </style>

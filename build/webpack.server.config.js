@@ -9,7 +9,7 @@ module.exports = Object.assign({}, base, {
     filename: 'server-bundle.js',
     libraryTarget: 'commonjs2'
   }),
-  externals: ['axios'],
+  externals: Object.keys(require('./../package.json').dependencies),
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
