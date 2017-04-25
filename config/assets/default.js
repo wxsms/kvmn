@@ -1,11 +1,11 @@
 module.exports = {
   server: {
-    allJS: ['server.js', 'config/**/*.js', 'server/*/**/*.js'],
-    models: 'server/*/models/**/*.js',
-    routes: ['server/!(core)/routes/**/*.js', 'server/core/routes/**/*.js'],
-    sockets: 'server/*/sockets/**/*.js',
-    config: ['server/*/config/*.js'],
-    policies: 'server/*/policies/*.js',
-    views: ['server/*/views/*.html']
+    allJS: ['server.js', 'config/**/*.js', 'src-server/*/**/*.js'],
+    models: 'src-server/*/models/**/*.js',
+    routes: ['src-server/!(core)/routes/**/*.js', 'src-server/core/routes/**/*.js'],
+    sockets: 'src-server/*/sockets/**/*.js',
+    config: ['src-server/*/config/*.js'],
+    policies: 'src-server/*/policies/*.js',
+    views: ['src-server/*/views/*.html']
   }
 }

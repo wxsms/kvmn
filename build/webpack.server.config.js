@@ -3,7 +3,7 @@ const base = require('./webpack.base.config')
 
 module.exports = Object.assign({}, base, {
   target: 'node',
-  entry: './src/server-entry.js',
+  entry: './src-client/server-entry.js',
   output: Object.assign({}, base.output, {
     filename: 'server-bundle.js',
     libraryTarget: 'commonjs2'

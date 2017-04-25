@@ -1,10 +1,12 @@
+const path = require('path')
+
 module.exports = {
   app: {
     title: 'kvmn',
     description: 'Full-Stack JavaScript with MongoDB, Kao, Vue.js, and Node.js',
     keywords: 'mongodb, koa, vue.js, node.js, mongoose'
   },
-  favicon: 'public/img/core/brand/favicon.ico',
+  favicon: 'src-client/assets/img/logo.png',
   db: {
     promise: global.Promise
   },
@@ -13,6 +15,11 @@ module.exports = {
   // DOMAIN config should be set to the fully qualified application accessible
   // URL. For example: https://www.myapp.com (including port if required).
   domain: process.env.DOMAIN,
+  webpack: {
+    assetsRoot: path.resolve(__dirname, '../../dist'),
+    assetsSubDirectory: 'static',
+    assetsPublicPath: '/dist/'
+  },
   // Session Cookie settings
   sessionOptions: {
     key: 'kvmn', /** (string) cookie key (default is koa:sess) */

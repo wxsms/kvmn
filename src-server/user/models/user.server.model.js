@@ -87,7 +87,7 @@ let UserSchema = new Schema({
   },
   profileImageURL: {
     type: String,
-    default: 'client/users/img/profile/default.png'
+    default: 'src-client/users/img/profile/default.png'
   },
   provider: {
     type: String,

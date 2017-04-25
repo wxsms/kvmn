@@ -1,26 +1,26 @@
 const path = require('path')
 const vueConfig = require('./vue-loader.config')
-const config = require('./config')
+const config = require('./../config/config')
 const utils = require('./utils')
 
 module.exports = {
   devtool: '#source-map',
   entry: {
-    app: './src/client-entry.js',
+    app: './src-client/client-entry.js',
     vendor: ['vue', 'vue-router', 'vuex', 'vuex-router-sync', 'axios']
   },
   resolve: {
-    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    modules: [path.resolve(__dirname, 'src-client'), 'node_modules'],
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'src': path.resolve(__dirname, '../src'),
-      'assets': path.resolve(__dirname, '../src/assets'),
-      'components': path.resolve(__dirname, '../src/components')
+      'client': path.resolve(__dirname, '../src-client'),
+      'assets': path.resolve(__dirname, '../src-client/assets'),
+      'components': path.resolve(__dirname, '../src-client/components')
     }
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: config.dev.assetsPublicPath,
+    path: config.webpack.assetsRoot,
+    publicPath: config.webpack.assetsPublicPath,
     filename: 'client-bundle.js'
   },
   module: {

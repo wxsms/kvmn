@@ -26,7 +26,7 @@ const initMorganHttpLogger = (app) => {
 }
 
 const initFaviconRoute = (app) => {
-  app.use(favicon(path.resolve(__dirname, './../../src/assets/logo.png')))
+  app.use(favicon(path.resolve(__dirname, './../../' + config.favicon)))
 }
 
 const initStaticRoutes = (app) => {
