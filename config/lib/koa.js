@@ -89,19 +89,12 @@ const initVueSsr = (app) => {
   })
 }
 
-const listenOnPort = (app) => {
-  const port = process.env.PORT || 3000
-  app.listen(port, () => {
-    console.log(`Server started at http://localhost:${port}`)
-  })
-}
-
 module.exports.init = () => {
   const app = new Koa()
   initRouteListener(app)
   initFaviconRoute(app)
   initStaticRoutes(app)
   initVueSsr(app)
-  listenOnPort(app)
+  // listenOnPort(app)
   return app
 }

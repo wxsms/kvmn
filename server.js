@@ -1,3 +1,3 @@
-const app = require('./config/lib/koa')
+const app = require('./config/lib/app')
 
-app.init()
+app.start()
