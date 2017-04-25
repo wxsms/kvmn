@@ -2,7 +2,6 @@ const base = require('./webpack.base.config')
 const webpack = require('webpack')
 const vueConfig = require('./vue-loader.config')
 
-
 const config = Object.assign({}, base, {
   plugins: (base.plugins || []).concat([
     // strip comments in Vue code
@@ -23,16 +22,17 @@ if (process.env.NODE_ENV === 'production') {
 
   vueConfig.loaders = {
     css: ExtractTextPlugin.extract({
-      loader: 'css-loader',
-      fallbackLoader: 'vue-style-loader'
+      use: 'css-loader'
+    }),
+    less: ExtractTextPlugin.extract({
+      use: 'css-loader!less-loader'
     }),
     stylus: ExtractTextPlugin.extract({
-      loader: 'css-loader!stylus-loader',
-      fallbackLoader: 'vue-style-loader'
+      use: 'css-loader!stylus-loader'
     })
   }
 
-  config.plugins.push(
+  config.plugins = config.plugins.concat([
     new ExtractTextPlugin('styles.css'),
     // this is needed in webpack 2 for minifying CSS
     new webpack.LoaderOptionsPlugin({
@@ -42,9 +42,10 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
-      }
+      },
+      sourceMap: true
     })
-  )
+  ])
 }
 
 module.exports = config

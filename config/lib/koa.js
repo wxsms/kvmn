@@ -9,12 +9,15 @@ const Koa = require('koa')
 const staticCache = require('koa-static-cache')
 const favicon = require('koa-favicon')
 const morgan = require('koa-morgan')
+const bodyParser = require('koa-bodyparser')
+const session = require('koa-session')
+const lusca = require('koa-lusca')
+const helmet = require('koa-helmet')
+const mime = require('mime')
 const logger = require('./logger')
 const _ = require('lodash')
 const config = require('./../config')
-/**
- * Initialize application middleware
- */
+
 const initMorganHttpLogger = (app) => {
   // Enable logger (morgan) if enabled in the configuration file
   if (_.has(config, 'log.format')) {
@@ -32,6 +35,23 @@ const initStaticRoutes = (app) => {
     maxAge: 365 * 24 * 60 * 60,
     prefix: '/dist'
   }))
+}
+
+const initParsers = (app) => {
+  app.use(bodyParser())
+  app.use(session(config.sessionOptions, app))
+}
+
+const initSecures = (app) => {
+  app.use(helmet())
+  app.use(lusca(config.csrf))
+}
+
+const correctMimeTypes = (app) => {
+  app.use(async (ctx, next) => {
+    ctx.type = mime.lookup(ctx.path)
+    await next()
+  })
 }
 
 const initVueSsr = (app) => {
@@ -95,10 +115,14 @@ const initVueSsr = (app) => {
 
 module.exports.init = () => {
   const app = new Koa()
-  initMorganHttpLogger(app)
-  initFaviconRoute(app)
-  initStaticRoutes(app)
+  if (!IS_PROD) {
+    correctMimeTypes(app)
+  }
+  initSecures(app) // lusca, helmet
+  initParsers(app)  // body-parser, session
+  initMorganHttpLogger(app) // koa-morgan
+  initFaviconRoute(app) // koa-favicon
+  initStaticRoutes(app) // koa-static-cache
   initVueSsr(app)
-  // listenOnPort(app)
   return app
 }

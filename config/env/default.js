@@ -4,6 +4,7 @@ module.exports = {
     description: 'Full-Stack JavaScript with MongoDB, Kao, Vue.js, and Node.js',
     keywords: 'mongodb, koa, vue.js, node.js, mongoose'
   },
+  favicon: 'public/img/core/brand/favicon.ico',
   db: {
     promise: global.Promise
   },
@@ -13,31 +14,28 @@ module.exports = {
   // URL. For example: https://www.myapp.com (including port if required).
   domain: process.env.DOMAIN,
   // Session Cookie settings
-  sessionCookie: {
-    // session expiration is set by default to 24 hours
-    maxAge: 24 * (60 * 60 * 1000),
-    // httpOnly flag makes sure the cookie is only accessed
-    // through the HTTP protocol and not JS/browser
-    httpOnly: true,
-    // secure cookie should be turned to true to provide additional
-    // layer of security so that the cookie is set only when working
-    // in HTTPS mode.
-    secure: false
+  sessionOptions: {
+    key: 'kvmn', /** (string) cookie key (default is koa:sess) */
+    maxAge: 86400000, /** (number) maxAge in ms (default is 1 days) */
+    overwrite: true, /** (boolean) can overwrite or not (default true) */
+    httpOnly: true, /** (boolean) httpOnly or not (default true) */
+    signed: true /** (boolean) signed or not (default true) */
+    /**
+     * You can store the session content in external stores(redis, mongodb or other DBs) by pass options.store with three methods(need to be async function):
+     * - get(key): get session object by key
+     * - set(key, sess, maxAge): set session object for key, with a maxAge (in ms)
+     * - destroy(key): destroy session for key
+     */
   },
-  // sessionSecret should be changed for security measures and concerns
-  sessionSecret: process.env.SESSION_SECRET || 'KVMN',
-  // sessionKey is the cookie session name
-  sessionKey: 'sessionId',
-  sessionCollection: 'sessions',
-  // Lusca config
+  // lusca config
   csrf: {
-    csrf: false,
+    csrf: true,
     csp: false,
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF',
+    hsts: {maxAge: 31536000, includeSubDomains: true},
     xssProtection: true
   },
-  favicon: 'public/img/core/brand/favicon.ico',
   illegalUsernames: ['meanjs', 'administrator', 'password', 'admin', 'user',
     'unknown', 'anonymous', 'null', 'undefined', 'api'
   ]
