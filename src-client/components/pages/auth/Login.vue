@@ -23,8 +23,6 @@
 </template>
 
 <script>
-  import axios from 'axios'
-
   export default {
     data () {
       return {
@@ -36,14 +34,12 @@
     },
     methods: {
       onSubmit () {
-        axios.post('/api/auth/login', this.formData)
-          .then(response => {
-            window.alert(`Success!`)
+        this.$store.dispatch('login', this.formData)
+          .then(() => {
+            window.alert('success')
           })
           .catch(err => {
-            if (err.response && err.response.data) {
-              window.alert(`Error: ${err.response.data.msg}`)
-            }
+            console.error(err)
           })
       }
     }

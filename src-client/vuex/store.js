@@ -6,21 +6,29 @@ import * as getters from './getters'
 Vue.use(Vuex)
 
 const state = {
+  user: null,
   topics: [],
   count: 0
 }
 
 const mutations = {
-  TOPICS_LIST: (state, topics) => {
+  [actions.TYPES.TOPICS_LIST]: (state, topics) => {
     state.topics = topics
   },
-
-  INCREMENT: (state) => {
+  [actions.TYPES.INCREMENT]: (state) => {
     state.count++
   },
-
-  DECREMENT: (state) => {
+  [actions.TYPES.DECREMENT]: (state) => {
     state.count--
+  },
+  [actions.TYPES.CURRENT_USER]: (state, user) => {
+    state.user = user
+  },
+  [actions.TYPES.LOGIN]: (state, user) => {
+    state.user = user
+  },
+  [actions.TYPES.LOGOUT]: (state) => {
+    state.user = null
   }
 }
 

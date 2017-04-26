@@ -14,6 +14,7 @@ const bodyParser = require('koa-bodyparser')
 const session = require('koa-session')
 const lusca = require('koa-lusca')
 const helmet = require('koa-helmet')
+const passport = require('koa-passport')
 const mime = require('mime')
 const logger = require('./logger')
 const _ = require('lodash')
@@ -137,17 +138,23 @@ const initApiRoutes = (router) => {
 
 const initErrorRoutes = (router) => {
   // Set api and dist that not exist as 404
-  router.all(/^\/api(?:\/|$)|(^\/dist(?:\/|$))/, async (ctx, next) => {
+  router.all(/^\/api(?:\/|$)|(^\/dist(?:\/|$))/, ctx => {
     ctx.body = 'Not Found'
     ctx.type = 'text'
     ctx.status = 404
-    await next()
   })
+}
+
+const initPassport = (app) => {
+  require('./../auth/local')
+  app.use(passport.initialize())
+  app.use(passport.session())
 }
 
 module.exports.init = () => {
   const app = new Koa()
   const router = new Router()
+  app.keys = [config.sessionOptions.key]
   // in development mode static files lost mime type, fix by manually add
   if (!IS_PROD) {
     correctMimeTypes(app)
@@ -156,6 +163,8 @@ module.exports.init = () => {
   initSecures(app)
   // body-parser, session
   initParsers(app)
+  // passport
+  initPassport(app)
   // koa-morgan
   initMorganHttpLogger(app)
   // koa-favicon

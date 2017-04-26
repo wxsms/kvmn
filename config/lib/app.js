@@ -12,18 +12,19 @@ const seedDB = () => {
   }
 }
 
-// Initialize Models
-mongoose.loadModels(seedDB)
-
 const init = () => {
   return new Promise((resolve, reject) => {
-    mongoose.connect()
-      .then(() => {
-        // Initialize Koa
-        let app = koa.init()
-        resolve(app)
-      })
-      .catch(reject)
+    // Initialize Models
+    mongoose.loadModels(() => {
+      seedDB()
+      mongoose.connect()
+        .then(() => {
+          // Initialize Koa
+          let app = koa.init()
+          resolve(app)
+        })
+        .catch(reject)
+    })
   })
 }
 
