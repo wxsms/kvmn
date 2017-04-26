@@ -105,10 +105,16 @@ const initVueSsr = (app) => {
     const context = {url: ctx.path}
     const vueRenderStream = renderer.renderToStream(context)
     const responseStream = require('stream').PassThrough()
-    responseStream.write(html.head)
-    if (context.initialState) {
-      responseStream.write(`<script>window.__INITIAL_STATE__ = ${serialize(context.initialState, {isJSON: true})}</script>`)
-    }
+    let firstChunk = true
+    vueRenderStream.on('data', chunk => {
+      if (firstChunk) {
+        responseStream.write(html.head)
+        if (context.initialState) {
+          responseStream.write(`<script>window.__INITIAL_STATE__=${serialize(context.initialState, {isJSON: true})}</script>`)
+        }
+        firstChunk = false
+      }
+    })
     vueRenderStream.on('end', () => {
       responseStream.end(html.tail)
     }).pipe(responseStream)

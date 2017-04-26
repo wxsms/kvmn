@@ -7,7 +7,8 @@ const config = Object.assign({}, base, {
   plugins: (base.plugins || []).concat([
     // strip comments in Vue code
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.BROWSER': true
     }),
     // extract vendor chunks for better caching
     new webpack.optimize.CommonsChunkPlugin({
@@ -35,7 +36,8 @@ if (process.env.NODE_ENV === 'production') {
 
   config.plugins = config.plugins.concat([
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/style.css')
+      filename: utils.assetsPath('css/style.css'),
+      allChunks: true
     }),
     // this is needed in webpack 2 for minifying CSS
     new webpack.LoaderOptionsPlugin({
