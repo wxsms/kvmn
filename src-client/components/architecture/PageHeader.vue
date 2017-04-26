@@ -1,6 +1,6 @@
 <template>
   <section>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" @click="showNavbar=!showNavbar">
@@ -15,12 +15,6 @@
           <ul class="nav navbar-nav">
             <router-link to="/topics" tag="li">
               <a role="button">Topics</a>
-            </router-link>
-            <router-link to="/counter" tag="li">
-              <a role="button">Counter</a>
-            </router-link>
-            <router-link to="/about" tag="li">
-              <a role="button">About</a>
             </router-link>
           </ul>
 

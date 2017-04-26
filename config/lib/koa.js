@@ -108,7 +108,16 @@ const initVueSsr = (app) => {
       ctx.body = 'Preparing client bundle, please wait...'
       return await next()
     }
-    const context = {url: ctx.path}
+    let user = null
+    if (ctx.state.user) {
+      user = ctx.state.user.toJSON()
+      delete user.password
+      delete user.salt
+    }
+    const context = {
+      url: ctx.path,
+      user: user
+    }
     const vueRenderStream = renderer.renderToStream(context)
     const responseStream = require('stream').PassThrough()
     let firstChunk = true

@@ -7,8 +7,7 @@ Vue.use(Vuex)
 
 const state = {
   user: null,
-  topics: [],
-  count: 0
+  topics: []
 }
 
 const mutations = {
@@ -18,13 +17,7 @@ const mutations = {
   [actions.TYPES.CLEAR_TOPICS]: (state) => {
     state.topics = []
   },
-  [actions.TYPES.INCREMENT]: (state) => {
-    state.count++
-  },
-  [actions.TYPES.DECREMENT]: (state) => {
-    state.count--
-  },
-  [actions.TYPES.CURRENT_USER]: (state, user) => {
+  [actions.TYPES.SET_USER]: (state, user) => {
     state.user = user
   },
   [actions.TYPES.LOGIN]: (state, user) => {

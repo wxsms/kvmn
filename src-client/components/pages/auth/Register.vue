@@ -53,7 +53,7 @@
       onSubmit () {
         axios.post('/api/auth/register', this.formData)
           .then(response => {
-            window.alert(`Success!`)
+            this.$router.push('/auth/login')
           })
           .catch(err => {
             if (err.response && err.response.data) {

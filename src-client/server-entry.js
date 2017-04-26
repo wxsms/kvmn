@@ -1,6 +1,10 @@
 import { app, router, store } from './app'
 
 export default context => {
+  // Inject the session user to vuex state
+  if (context.user) {
+    store.state.user = context.user
+  }
   // set router's location
   router.push(context.url)
   // call prefetch hooks on components matched by the route

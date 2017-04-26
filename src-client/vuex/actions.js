@@ -3,9 +3,7 @@ import axios from 'axios'
 export const TYPES = {
   TOPICS_LIST: 'TOPICS_LIST',
   CLEAR_TOPICS: 'CLEAR_TOPICS',
-  INCREMENT: 'INCREMENT',
-  DECREMENT: 'DECREMENT',
-  CURRENT_USER: 'CURRENT_USER',
+  SET_USER: 'SET_USER',
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT'
 }
@@ -21,24 +19,9 @@ export const getTopics = ({commit}) => {
       console.log(error)
     })
 }
-
 export const clearTopics = ({commit}) => commit(TYPES.CLEAR_TOPICS)
 
-export const increment = ({commit}) => commit(TYPES.INCREMENT)
-export const decrement = ({commit}) => commit(TYPES.DECREMENT)
-
-export const getCurrentUser = ({commit}) => {
-  return axios.get('/api/auth/user')
-    .then((response) => {
-      if (response.data && response.data._id) {
-        commit(TYPES.CURRENT_USER, response.data)
-      }
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-}
-
+export const setUser = ({commit}, user) => commit(TYPES.DECREMENT, user)
 export const login = ({commit}, data) => {
   axios.post('/api/auth/login', data)
     .then(response => {
@@ -48,7 +31,6 @@ export const login = ({commit}, data) => {
       console.error(err)
     })
 }
-
 export const logout = ({commit}) => {
   return axios.post('/api/auth/logout')
     .then(response => {

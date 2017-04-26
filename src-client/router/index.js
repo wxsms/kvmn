@@ -17,14 +17,6 @@ const router = new VueRouter({
       component: process.BROWSER ? () => System.import('../components/pages/Topics.vue') : require('../components/pages/Topics.vue')
     },
     {
-      path: '/counter',
-      component: process.BROWSER ? () => System.import('../components/pages/Counter.vue') : require('../components/pages/Counter.vue')
-    },
-    {
-      path: '/about',
-      component: process.BROWSER ? () => System.import('../components/pages/About.vue') : require('../components/pages/About.vue')
-    },
-    {
       path: '/auth/register',
       component: process.BROWSER ? () => System.import('../components/pages/auth/Register.vue') : require('../components/pages/auth/Register.vue')
     },

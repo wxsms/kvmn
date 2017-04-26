@@ -1,17 +1,6 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
 
-exports.getCurrent = ctx => {
-  if (ctx.state.user) {
-    let user = ctx.state.user.toJSON()
-    delete user.password
-    delete user.salt
-    ctx.body = user
-  } else {
-    ctx.body = null
-  }
-}
-
 exports.register = async (ctx) => {
   let body = ctx.request.body
   // For security measurement we remove the roles from the req.body object
