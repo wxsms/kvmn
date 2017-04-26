@@ -32,7 +32,6 @@ passport.deserializeUser(async (id, done) => {
 })
 
 passport.use(new LocalStrategy(function (usernameOrEmail, password, done) {
-  console.log(usernameOrEmail, password)
   fetchUser(null, usernameOrEmail)
     .then((user) => {
       if (!user || !user.authenticate(password)) {

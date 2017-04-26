@@ -23,7 +23,15 @@
               <a role="button">About</a>
             </router-link>
           </ul>
-          <ul class="nav navbar-nav navbar-right">
+
+          <ul class="nav navbar-nav navbar-right" v-if="user">
+            <li><a role="button" @click="logout">
+              <i class="glyphicon glyphicon-log-out"></i>
+              Logout
+            </a></li>
+          </ul>
+          <p class="navbar-text navbar-right" v-if="user">Signed in as {{user.displayName}}</p>
+          <ul class="nav navbar-nav navbar-right" v-if="!user">
             <router-link to="/auth/login" tag="li">
               <a role="button">Login</a>
             </router-link>
@@ -38,11 +46,23 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
   export default {
     components: {},
     data () {
       return {
         showNavbar: false
+      }
+    },
+    computed: {
+      ...mapGetters({
+        user: 'getUser'
+      })
+    },
+    methods: {
+      logout () {
+        this.$store.dispatch(`logout`)
       }
     }
   }

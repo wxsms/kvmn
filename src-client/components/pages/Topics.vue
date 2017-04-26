@@ -21,7 +21,12 @@
       })
     },
     mounted () {
-      fetchInitialData(this.$store)
+      if (this.topics.length === 0) {
+        fetchInitialData(this.$store)
+      }
+    },
+    beforeDestroy () {
+      this.$store.dispatch(`clearTopics`)
     }
   }
 </script>

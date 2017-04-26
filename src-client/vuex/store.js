@@ -15,6 +15,9 @@ const mutations = {
   [actions.TYPES.TOPICS_LIST]: (state, topics) => {
     state.topics = topics
   },
+  [actions.TYPES.CLEAR_TOPICS]: (state) => {
+    state.topics = []
+  },
   [actions.TYPES.INCREMENT]: (state) => {
     state.count++
   },

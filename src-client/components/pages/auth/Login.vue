@@ -36,7 +36,7 @@
       onSubmit () {
         this.$store.dispatch('login', this.formData)
           .then(() => {
-            window.alert('success')
+            this.$router.push('/')
           })
           .catch(err => {
             console.error(err)

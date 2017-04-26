@@ -8,7 +8,7 @@ exports.getCurrent = ctx => {
     delete user.salt
     ctx.body = user
   } else {
-    ctx.body = {}
+    ctx.body = null
   }
 }
 
@@ -41,4 +41,9 @@ exports.login = ctx => {
   delete user.password
   delete user.salt
   ctx.body = user
+}
+
+exports.logout = ctx => {
+  ctx.logout()
+  ctx.body = true
 }

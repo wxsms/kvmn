@@ -12,7 +12,10 @@
   import PageHeader from './PageHeader.vue'
 
   export default {
-    components: {Page, PageHeader, PageFooter}
+    components: {Page, PageHeader, PageFooter},
+    mounted () {
+      this.$store.dispatch(`getCurrentUser`)
+    }
   }
 </script>
 

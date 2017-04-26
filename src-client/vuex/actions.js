@@ -2,6 +2,7 @@ import axios from 'axios'
 
 export const TYPES = {
   TOPICS_LIST: 'TOPICS_LIST',
+  CLEAR_TOPICS: 'CLEAR_TOPICS',
   INCREMENT: 'INCREMENT',
   DECREMENT: 'DECREMENT',
   CURRENT_USER: 'CURRENT_USER',
@@ -21,6 +22,8 @@ export const getTopics = ({commit}) => {
     })
 }
 
+export const clearTopics = ({commit}) => commit(TYPES.CLEAR_TOPICS)
+
 export const increment = ({commit}) => commit(TYPES.INCREMENT)
 export const decrement = ({commit}) => commit(TYPES.DECREMENT)
 
@@ -31,22 +34,27 @@ export const getCurrentUser = ({commit}) => {
         commit(TYPES.CURRENT_USER, response.data)
       }
     })
-    .catch((error) => {
-      console.log(error)
+    .catch((err) => {
+      console.error(err)
     })
 }
 
 export const login = ({commit}, data) => {
-  return new Promise((resolve, reject) => {
-    axios.post('/api/auth/login', data)
-      .then(response => {
-        commit(TYPES.LOGIN, response.data)
-        resolve()
-      })
-      .catch(err => {
-        reject(err)
-      })
-  })
+  axios.post('/api/auth/login', data)
+    .then(response => {
+      commit(TYPES.LOGIN, response.data)
+    })
+    .catch(err => {
+      console.error(err)
+    })
 }
 
-export const logout = ({commit}) => commit(TYPES.LOGOUT)
+export const logout = ({commit}) => {
+  return axios.post('/api/auth/logout')
+    .then(response => {
+      commit(TYPES.LOGOUT)
+    })
+    .catch(err => {
+      console.error(err)
+    })
+}

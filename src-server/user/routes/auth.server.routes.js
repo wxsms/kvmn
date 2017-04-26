@@ -6,4 +6,5 @@ module.exports = (router) => {
     .get('/api/auth/user', user.getCurrent)
     .post('/api/auth/register', user.register)
     .post('/api/auth/login', passport.authenticate('local'), user.login)
+    .post('/api/auth/logout', user.logout)
 }
