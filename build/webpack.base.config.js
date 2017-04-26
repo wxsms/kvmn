@@ -3,6 +3,10 @@ const vueConfig = require('./vue-loader.config')
 const config = require('./../config/config')
 const utils = require('./utils')
 
+function resolve (dir) {
+  return path.join(__dirname, '..', dir)
+}
+
 module.exports = {
   devtool: '#source-map',
   entry: {
@@ -10,12 +14,12 @@ module.exports = {
     vendor: ['vue', 'vue-router', 'vuex', 'vuex-router-sync', 'axios']
   },
   resolve: {
-    modules: [path.resolve(__dirname, 'src-client'), 'node_modules'],
+    modules: [resolve('src-client'), 'node_modules'],
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'client': path.resolve(__dirname, '../src-client'),
-      'assets': path.resolve(__dirname, '../src-client/assets'),
-      'components': path.resolve(__dirname, '../src-client/components')
+      'client': resolve('src-client'),
+      'assets': resolve('src-client/assets'),
+      'components': resolve('src-client/components')
     }
   },
   output: {
@@ -29,7 +33,7 @@ module.exports = {
         test: /\.(js|vue)$/,
         loader: 'eslint-loader',
         enforce: 'pre',
-        exclude: /node_modules/
+        include: [resolve('src-client')]
       },
       {
         test: /\.vue$/,

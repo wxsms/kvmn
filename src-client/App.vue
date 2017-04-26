@@ -1,37 +1,17 @@
 <template>
-  <div id="app">
-    <img src="./assets/img/logo.png">
-    <ul>
-      <li>
-        <router-link to="/" exact>Home</router-link>
-      </li>
-      <li>
-        <router-link to="/topics">Topics</router-link>
-      </li>
-      <li>
-        <router-link to="/counter">Counter</router-link>
-      </li>
-      <li>
-        <router-link to="/about">About</router-link>
-      </li>
-    </ul>
-    <router-view class="view"></router-view>
-  </div>
+  <section id="app">
+    <page-wrapper></page-wrapper>
+  </section>
 </template>
 
 <script>
-  export default {}
+  import PageWrapper from './components/architecture/PageWrapper.vue'
+  export default {
+    components: {PageWrapper}
+  }
 </script>
 
 <style lang="less">
   @import "./../node_modules/bootstrap/dist/css/bootstrap.min.css";
   @import './assets/css/core';
-
-  body {
-    font-family: Helvetica, sans-serif;
-  }
-
-  .router-link-active {
-    color: red;
-  }
 </style>
