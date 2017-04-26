@@ -1,9 +1,7 @@
 import request from 'axios'
 
-request.defaults.baseURL = 'http://jsonplaceholder.typicode.com/'
-
 export const getTopics = ({ commit, state }) => {
-  return request.get('posts').then((response) => {
+  return request.get('http://jsonplaceholder.typicode.com/posts').then((response) => {
     if (response.statusText === 'OK') {
       commit('TOPICS_LIST', response.data)
     }

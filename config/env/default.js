@@ -36,7 +36,7 @@ module.exports = {
   },
   // lusca config
   csrf: {
-    csrf: true,
+    csrf: false,
     csp: false,
     xframe: 'SAMEORIGIN',
     p3p: 'ABCDEF',

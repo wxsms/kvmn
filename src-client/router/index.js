@@ -25,8 +25,12 @@ const router = new VueRouter({
       component: process.BROWSER ? () => System.import('../components/pages/About.vue') : require('../components/pages/About.vue')
     },
     {
-      path: '/user/register',
-      component: process.BROWSER ? () => System.import('../components/pages/user/Register.vue') : require('../components/pages/user/Register.vue')
+      path: '/auth/register',
+      component: process.BROWSER ? () => System.import('../components/pages/auth/Register.vue') : require('../components/pages/auth/Register.vue')
+    },
+    {
+      path: '/auth/login',
+      component: process.BROWSER ? () => System.import('../components/pages/auth/Login.vue') : require('../components/pages/auth/Login.vue')
     }
   ]
 })

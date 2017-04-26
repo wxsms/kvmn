@@ -6,6 +6,7 @@ const resolve = file => path.resolve(__dirname, file)
 const serialize = require('serialize-javascript')
 const createBundleRenderer = require('vue-server-renderer').createBundleRenderer
 const Koa = require('koa')
+const Router = require('koa-router')
 const staticCache = require('koa-static-cache')
 const favicon = require('koa-favicon')
 const morgan = require('koa-morgan')
@@ -49,7 +50,11 @@ const initSecures = (app) => {
 
 const correctMimeTypes = (app) => {
   app.use(async (ctx, next) => {
-    ctx.type = mime.lookup(ctx.path)
+    if (ctx.path.startsWith('/api/')) {
+      ctx.type = 'json'
+    } else {
+      ctx.type = mime.lookup(ctx.path)
+    }
     await next()
   })
 }
@@ -123,16 +128,49 @@ const initVueSsr = (app) => {
   })
 }
 
+const initApiRoutes = (router) => {
+  // Globbing routing files
+  config.files.server.routes.forEach((routePath) => {
+    require(path.resolve(routePath))(router)
+  })
+}
+
+const initErrorRoutes = (router) => {
+  // Set api and dist that not exist as 404
+  router.all(/^\/api(?:\/|$)|(^\/dist(?:\/|$))/, async (ctx, next) => {
+    ctx.body = 'Not Found'
+    ctx.type = 'text'
+    ctx.status = 404
+    await next()
+  })
+}
+
 module.exports.init = () => {
   const app = new Koa()
+  const router = new Router()
+  // in development mode static files lost mime type, fix by manually add
   if (!IS_PROD) {
     correctMimeTypes(app)
   }
-  initSecures(app) // lusca, helmet
-  initParsers(app)  // body-parser, session
-  initMorganHttpLogger(app) // koa-morgan
-  initFaviconRoute(app) // koa-favicon
-  initStaticRoutes(app) // koa-static-cache
+  // lusca, helmet
+  initSecures(app)
+  // body-parser, session
+  initParsers(app)
+  // koa-morgan
+  initMorganHttpLogger(app)
+  // koa-favicon
+  initFaviconRoute(app)
+  // koa-static-cache
+  initStaticRoutes(app)
+  // All modules API route
+  initApiRoutes(router)
+  // 404
+  initErrorRoutes(router)
+  // Vue SSR middleware
   initVueSsr(app)
+  // setup router
+  app
+    .use(router.routes())
+    .use(router.allowedMethods())
   return app
 }

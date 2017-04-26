@@ -14,14 +14,14 @@ const generatePassword = require('generate-password')
 /**
  * A Validation function for local strategy properties
  */
-const validateLocalStrategyProperty = (property) => {
+const validateLocalStrategyProperty = function (property) {
   return ((this.provider !== 'local' && !this.updated) || property.length)
 }
 
 /**
  * A Validation function for local strategy email
  */
-const validateLocalStrategyEmail = (email) => {
+const validateLocalStrategyEmail = function (email) {
   return ((this.provider !== 'local' && !this.updated) || validator.isEmail(email, {require_tld: false}))
 }
 
@@ -34,7 +34,7 @@ const validateLocalStrategyEmail = (email) => {
  * - no consecutive dots: "." ok, ".." nope
  * - not begin or end with "."
  */
-const validateUsername = (username) => {
+const validateUsername = function (username) {
   let usernameRegex = /^(?=[\w.-]+$)(?!.*[._-]{2})(?!\.)(?!.*\.$).{3,34}$/
   return this.provider !== 'local' || (username && usernameRegex.test(username) && config.illegalUsernames.indexOf(username) < 0)
 }
@@ -122,7 +122,7 @@ let UserSchema = new Schema({
 /**
  * Hook a pre save method to hash the password
  */
-UserSchema.pre('save', next => {
+UserSchema.pre('save', function (next) {
   if (this.password && this.isModified('password')) {
     this.salt = crypto.randomBytes(16).toString('base64')
     this.password = this.hashPassword(this.password)
@@ -133,7 +133,7 @@ UserSchema.pre('save', next => {
 /**
  * Create instance method for hashing a password
  */
-UserSchema.methods.hashPassword = password => {
+UserSchema.methods.hashPassword = function (password) {
   if (this.salt && password) {
     return crypto.pbkdf2Sync(password, new Buffer(this.salt, 'base64'), 10000, 64, 'SHA1').toString('base64')
   } else {
@@ -144,14 +144,14 @@ UserSchema.methods.hashPassword = password => {
 /**
  * Create instance method for authenticating user
  */
-UserSchema.methods.authenticate = password => {
+UserSchema.methods.authenticate = function (password) {
   return this.password === this.hashPassword(password)
 }
 
 /**
  * Find possible not used username
  */
-UserSchema.statics.findUniqueUsername = (username, suffix, callback) => {
+UserSchema.statics.findUniqueUsername = function (username, suffix, callback) {
   let _this = this
   let possibleUsername = username.toLowerCase() + (suffix || '')
 

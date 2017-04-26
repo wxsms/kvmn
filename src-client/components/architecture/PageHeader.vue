@@ -24,10 +24,10 @@
             </router-link>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <router-link to="/login" tag="li">
+            <router-link to="/auth/login" tag="li">
               <a role="button">Login</a>
             </router-link>
-            <router-link to="/user/register" tag="li">
+            <router-link to="/auth/register" tag="li">
               <a role="button">Register</a>
             </router-link>
           </ul>
