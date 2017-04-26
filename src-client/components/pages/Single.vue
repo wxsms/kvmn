@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div class="row">
-      <div class="col-xs-12">
+      <div class="col-xs-12" v-if="article">
         <h2 class="page-header">{{article.title}}</h2>
         <p>{{article.body}}</p>
       </div>

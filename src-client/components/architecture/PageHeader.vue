@@ -12,7 +12,7 @@
           <router-link class="navbar-brand" role="button" to="/" exact>Home</router-link>
         </div>
         <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav" v-if="user">
             <router-link to="/articles" tag="li">
               <a role="button">Articles</a>
             </router-link>
@@ -57,6 +57,9 @@
     methods: {
       logout () {
         this.$store.dispatch(`logout`)
+          .then(() => {
+            this.$router.push('/')
+          })
       }
     }
   }
