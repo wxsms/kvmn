@@ -13,8 +13,12 @@ const router = new VueRouter({
       component: process.BROWSER ? () => System.import('../components/pages/Home.vue') : require('../components/pages/Home.vue')
     },
     {
-      path: '/topics',
-      component: process.BROWSER ? () => System.import('../components/pages/Topics.vue') : require('../components/pages/Topics.vue')
+      path: '/articles',
+      component: process.BROWSER ? () => System.import('../components/pages/Articles.vue') : require('../components/pages/Articles.vue')
+    },
+    {
+      path: '/articles/:id',
+      component: process.BROWSER ? () => System.import('../components/pages/Single.vue') : require('../components/pages/Single.vue')
     },
     {
       path: '/auth/register',

@@ -13,8 +13,8 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <router-link to="/topics" tag="li">
-              <a role="button">Topics</a>
+            <router-link to="/articles" tag="li">
+              <a role="button">Articles</a>
             </router-link>
           </ul>
 

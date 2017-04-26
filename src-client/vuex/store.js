@@ -7,15 +7,22 @@ Vue.use(Vuex)
 
 const state = {
   user: null,
-  topics: []
+  articles: [],
+  article: null
 }
 
 const mutations = {
-  [actions.TYPES.TOPICS_LIST]: (state, topics) => {
-    state.topics = topics
+  [actions.TYPES.ARTICLE_LIST]: (state, articles) => {
+    state.articles = articles
   },
-  [actions.TYPES.CLEAR_TOPICS]: (state) => {
-    state.topics = []
+  [actions.TYPES.CLEAR_ARTICLES]: (state) => {
+    state.articles = []
+  },
+  [actions.TYPES.ARTICLE]: (state, article) => {
+    state.article = article
+  },
+  [actions.TYPES.CLEAR_ARTICLE]: (state) => {
+    state.article = null
   },
   [actions.TYPES.SET_USER]: (state, user) => {
     state.user = user

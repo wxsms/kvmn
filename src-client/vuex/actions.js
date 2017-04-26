@@ -1,27 +1,38 @@
 import axios from 'axios'
 
 export const TYPES = {
-  TOPICS_LIST: 'TOPICS_LIST',
-  CLEAR_TOPICS: 'CLEAR_TOPICS',
+  ARTICLE_LIST: 'ARTICLE_LIST',
+  ARTICLE: 'ARTICLE',
+  CLEAR_ARTICLES: 'CLEAR_ARTICLES',
+  CLEAR_ARTICLE: 'CLEAR_ARTICLE',
   SET_USER: 'SET_USER',
   LOGIN: 'LOGIN',
   LOGOUT: 'LOGOUT'
 }
 
-export const getTopics = ({commit}) => {
-  return axios.get('http://jsonplaceholder.typicode.com/posts')
+export const getArticles = ({commit}) => {
+  return axios.get('http://localhost:3000/api/articles/')
     .then((response) => {
-      if (response.statusText === 'OK') {
-        commit(TYPES.TOPICS_LIST, response.data)
-      }
+      commit(TYPES.ARTICLE_LIST, response.data)
     })
     .catch((error) => {
       console.log(error)
     })
 }
-export const clearTopics = ({commit}) => commit(TYPES.CLEAR_TOPICS)
+export const clearArticles = ({commit}) => commit(TYPES.CLEAR_ARTICLES)
 
-export const setUser = ({commit}, user) => commit(TYPES.DECREMENT, user)
+export const getArticleById = ({commit}, id) => {
+  return axios.get('http://localhost:3000/api/articles/' + id)
+    .then((response) => {
+      commit(TYPES.ARTICLE, response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+export const clearArticle = ({commit}) => commit(TYPES.CLEAR_ARTICLE)
+
+export const setUser = ({commit}, user) => commit(TYPES.SET_USER, user)
 export const login = ({commit}, data) => {
   axios.post('/api/auth/login', data)
     .then(response => {
