@@ -10,7 +10,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      component: process.BROWSER ? () => System.import('../components/pages/Home.vue') : require('../components/pages/Home.vue')
+      component: require('../components/pages/Home.vue')
     },
     {
       path: '/articles',
