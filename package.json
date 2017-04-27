@@ -2,7 +2,7 @@
   "name": "kvmn",
   "version": "1.0.0",
   "kvmn-version": "0.0.1",
-  "description": "",
+  "description": "A Vue.js project with vue 2.0, vue-router and vuex starter kit for server side rendering.",
   "scripts": {
     "start": "cross-env NODE_ENV=production node server",
     "dev": "cross-env NODE_ENV=development node server",
@@ -11,7 +11,12 @@
     "build": "rimraf ./dist && npm run build:client && npm run build:server",
     "unit": "karma start ./test/unit/karma.conf.js --single-run"
   },
-  "keywords": [],
+  "keywords": [
+    "koa",
+    "vue",
+    "mongodb",
+    "nodejs"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
