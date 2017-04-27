@@ -39,7 +39,8 @@
             this.$router.push('/')
           })
           .catch(err => {
-            console.error(err)
+            console.log(err)
+            window.alert('Error: Incorrect user name or password.')
           })
       }
     }

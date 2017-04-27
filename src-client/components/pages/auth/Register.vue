@@ -58,6 +58,8 @@
           .catch(err => {
             if (err.response && err.response.data) {
               window.alert(`Error: ${err.response.data.msg}`)
+            } else {
+              window.alert(`Error`)
             }
           })
       }

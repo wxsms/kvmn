@@ -15,9 +15,6 @@ export const getArticles = ({commit}) => {
     .then((response) => {
       commit(TYPES.ARTICLE_LIST, response.data)
     })
-    .catch((error) => {
-      console.log(error)
-    })
 }
 export const clearArticles = ({commit}) => commit(TYPES.CLEAR_ARTICLES)
 
@@ -26,28 +23,19 @@ export const getArticleById = ({commit}, id) => {
     .then((response) => {
       commit(TYPES.ARTICLE, response.data)
     })
-    .catch((error) => {
-      console.log(error)
-    })
 }
 export const clearArticle = ({commit}) => commit(TYPES.CLEAR_ARTICLE)
 
 export const setUser = ({commit}, user) => commit(TYPES.SET_USER, user)
 export const login = ({commit}, data) => {
-  axios.post('/api/auth/login', data)
+  return axios.post('/api/auth/login', data)
     .then(response => {
       commit(TYPES.LOGIN, response.data)
-    })
-    .catch(err => {
-      console.error(err)
     })
 }
 export const logout = ({commit}) => {
   return axios.post('/api/auth/logout')
     .then(response => {
       commit(TYPES.LOGOUT)
-    })
-    .catch(err => {
-      console.error(err)
     })
 }
