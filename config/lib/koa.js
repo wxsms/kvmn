@@ -118,23 +118,18 @@ const initVueSsr = (app) => {
       url: ctx.path,
       user: user
     }
-    const vueRenderStream = renderer.renderToStream(context)
-    const responseStream = require('stream').PassThrough()
-    let firstChunk = true
-    vueRenderStream.on('data', chunk => {
-      if (firstChunk) {
-        responseStream.write(html.head)
-        if (context.initialState) {
-          responseStream.write(`<script>window.__INITIAL_STATE__=${serialize(context.initialState, {isJSON: true})}</script>`)
-        }
-        firstChunk = false
-      }
-    })
-    vueRenderStream.on('end', () => {
-      responseStream.end(html.tail)
-    }).pipe(responseStream)
     ctx.type = 'html'
-    ctx.body = responseStream
+    ctx.body = await new Promise((resolve, reject) => {
+      renderer.renderToString(context, (err, _html) => {
+        if (err) {
+          reject(err)
+        }
+        let stateScript = `<script>window.__INITIAL_STATE__=${serialize(context.initialState, {isJSON: true})}</script>`
+        _html = html.head + stateScript + _html + html.tail
+        resolve(_html)
+      })
+    })
+    return await next()
   })
 }
 
