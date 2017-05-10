@@ -10,6 +10,8 @@
 
 <script>
   export default {
+    name: 'homePage',
+    serverCacheKey: () => 'homePage',
     components: {}
   }
 </script>

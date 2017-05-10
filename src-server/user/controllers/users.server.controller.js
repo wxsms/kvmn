@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const User = mongoose.model('User')
+const sessionUtils = require('./../../../config/lib/session')
 
 exports.register = async (ctx) => {
   let body = ctx.request.body
@@ -26,10 +27,7 @@ exports.register = async (ctx) => {
 }
 
 exports.login = ctx => {
-  let user = ctx.state.user.toJSON()
-  delete user.password
-  delete user.salt
-  ctx.body = user
+  ctx.body = sessionUtils.getUserJson(ctx)
 }
 
 exports.logout = ctx => {

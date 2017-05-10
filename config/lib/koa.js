@@ -17,8 +17,10 @@ const helmet = require('koa-helmet')
 const passport = require('koa-passport')
 const mime = require('mime')
 const logger = require('./logger')
+const LRU = require('lru-cache')
 const _ = require('lodash')
 const config = require('./../config')
+const sessionUtils = require('./session')
 
 const initMorganHttpLogger = (app) => {
   // Enable logger (morgan) if enabled in the configuration file
@@ -62,7 +64,7 @@ const correctMimeTypes = (app) => {
 
 const initVueSsr = (app) => {
   // parse index.html template
-  const html = (() => {
+  const HTML = (() => {
     const template = fs.readFileSync(resolve('./../../index.html'), 'utf-8')
     const i = template.indexOf('{{ APP }}')
     let version = config.kvmn.version
@@ -79,13 +81,23 @@ const initVueSsr = (app) => {
   // init renderer base on env
   const createRenderer = (bundle) => {
     return createBundleRenderer(bundle, {
-      cache: require('lru-cache')({
+      // Component Level micro cache
+      cache: LRU({
         max: 1000,
         maxAge: 1000 * 60 * 15
       })
     })
   }
-
+  // Page level micro cache
+  const microCache = LRU({
+    max: 1000,
+    maxAge: 1000 // Important: entries expires after 1 second.
+  })
+  // implement logic to check if the request is user-specific.
+  // only non-user-specific pages are cache-able
+  const isCacheable = ctx => {
+    return !sessionUtils.isLogin(ctx)
+  }
   let renderer
   if (IS_PROD) {
     // create server renderer from real fs
@@ -108,25 +120,31 @@ const initVueSsr = (app) => {
       ctx.body = 'Preparing client bundle, please wait...'
       return await next()
     }
-    let user = null
-    if (ctx.state.user) {
-      user = ctx.state.user.toJSON()
-      delete user.password
-      delete user.salt
+    ctx.type = 'html'
+    const cacheable = isCacheable(ctx)
+    if (cacheable) {
+      const hit = microCache.get(ctx.path)
+      if (hit) {
+        console.log('hit cache!')
+        ctx.body = hit
+        return await next()
+      }
     }
     const context = {
       url: ctx.path,
-      user: user
+      user: sessionUtils.getUserJson(ctx)
     }
-    ctx.type = 'html'
     ctx.body = await new Promise((resolve, reject) => {
-      renderer.renderToString(context, (err, _html) => {
+      renderer.renderToString(context, (err, html) => {
         if (err) {
           reject(err)
         }
         let stateScript = `<script>window.__INITIAL_STATE__=${serialize(context.initialState, {isJSON: true})}</script>`
-        _html = html.head + stateScript + _html + html.tail
-        resolve(_html)
+        html = HTML.head + stateScript + html + HTML.tail
+        if (cacheable) {
+          microCache.set(ctx.path, html)
+        }
+        resolve(html)
       })
     })
     return await next()

@@ -11,7 +11,10 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    name: 'pageFooter',
+    serverCacheKey: () => 'pageFooter'
+  }
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
