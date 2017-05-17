@@ -90,8 +90,8 @@ const initVueSsr = (app) => {
   }
   // Page level micro cache
   const microCache = LRU({
-    max: 1000,
-    maxAge: 1000 // Important: entries expires after 1 second.
+    max: 1000, // maximum 1000 records
+    maxAge: 5000 // entries expires after 5 second.
   })
   // implement logic to check if the request is user-specific.
   // only non-user-specific pages are cache-able
